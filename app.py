@@ -106,8 +106,7 @@ def get_landmarks():
 @app.route('/get_Scale')
 def get_Scale():
     """Endpoint to get scale factor for the model."""
-    print(scale, "sca")
-    
+   
     return jsonify(scale= scale)
 
 @app.route('/capture_frame', methods=['POST'])
