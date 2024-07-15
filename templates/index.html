@@ -206,9 +206,10 @@ setInterval(captureFrame, 100);
       //   if (!isModelRotated(model, initialRotation)) {
       //     // Model is not significantly rotated, apply scaling
       //     model.scale.set(scaleX, scaleY, scaleZ);
-      //     ("Model scaled to:", scaleX, scaleY, scaleZ);
+      //     console.log("Model scaled to:", scaleX, scaleY, scaleZ);
       //   } else {
       //     // Model is rotated, skipping scaling
+      //     console.log("Model is rotated. Skipping scaling.");
       //   }
       // }
 
@@ -225,14 +226,19 @@ setInterval(captureFrame, 100);
           const midpointY = (leftShoulder.y + rightShoulder.y) / 2;
           const midpointZ = (leftShoulder.z + rightShoulder.z) / 2;
 
+          console.log("shoulder width:", leftShoulder.x - rightShoulder.x);
+
+
           function fetchScaleAndApply(uTmodel) {
   fetch('{{ url_for("get_Scale") }}') // Fetch the scale value from the server
     .then((response) => response.json()) // Parse the JSON response
     .then((data) => {
       const scale = Number(data.scale); // Assuming the scale is under the 'scale' key and converting it to a number
+      console.log(scale, "scale fetched from server");
 
       if (!isNaN(scale) && scale > 0) { // Validate that scale is a number and greater than 0
         uTmodel.scale.set(scale, scale, scale);
+        console.log(uTmodel.scale, "uTmodel.scale updated");
       } else {
         console.error("Invalid scale value:", scale);
       }
@@ -269,6 +275,7 @@ setInterval(captureFrame, 100);
           .then((response) => response.json())
           .then((data) => {
             updateModelPositionAndScale(data, uTmodel);
+            console.log(uTmodel.position, "uTmodel.position updated");
           })
           .catch((error) => console.error("Error fetching landmarks:", error));
       }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#">Men</a>
+            <a href="#">Women</a>
+            <a href="#">Kids</a>
+            <a href="#">Home & Living</a>
+            <a href="#">Beauty</a>
+            <a href="#">Studio</a>
+        </nav>
+    </header>
+    <div class="breadcrumb">
+        <a href="#">Home</a> / <a href="#">Clothing</a> / <a href="#">Women Clothing</a> / <a href="#">Kurta Sets</a> / {{ product.name }}
+    </div>
+    <div class="product-details">
+        <div class="image-section">
+            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+        </div>
+        <div class="details-section">
+            <h1>{{ product.name }}</h1>
+            <div class="rating">
+                <span>{{ product.rating }}</span> <span> | </span> <span>{{ product.reviews }} Ratings</span>
+            </div>
+            <div class="price">
+                <span class="current-price">₹{{ product.price }}</span>
+                <span class="original-price">₹{{ product.original_price }}</span>
+                <span class="discount">{{ product.discount }}% OFF</span>
+            </div>
+            <div class="size-select">
+                <span>Select Size:</span>
+                <div class="sizes">
+                    <button>S</button>
+                    <button>M</button>
+                    <button>L</button>
+                    <button>XL</button>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="add-to-bag">ADD TO BAG</button>
+                <button class="wishlist">WISHLIST</button>
+                <!-- Try On Button -->
+                <button class="try-on">TRY ON</button>
+            </div>
+            <div class="delivery-options">
+                <h3>DELIVERY OPTIONS</h3>
+                <input type="text" placeholder="Enter pincode">
+                <button>Check</button>
+                <p>100% Original Products</p>
+                <p>Pay on delivery might be available</p>
+                <p>Easy 14 days returns and exchanges</p>
+            </div>
+            <div class="offers">
+                <h3>BEST OFFERS</h3>
+                <p><strong>Best Price: ₹{{ product.best_price }}</strong></p>
+                <p>Applicable on: Orders above ₹1499 (only on first purchase)</p>
+                <p>Coupon code: MYNTRA400</p>
+                <p>Coupon Discount: ₹{{ product.coupon_discount }} off (check cart for final savings)</p>
+                <p>10% Instant Discount on ICICI Credit & Debit Cards</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <a href="{{ url_for('product_list') }}">Back to Product List</a>
+    </footer>
+</body>
+</html>

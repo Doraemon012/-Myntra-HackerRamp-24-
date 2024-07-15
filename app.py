@@ -106,7 +106,8 @@ def get_landmarks():
 @app.route('/get_Scale')
 def get_Scale():
     """Endpoint to get scale factor for the model."""
-   
+    print(scale, "sca")
+    
     return jsonify(scale= scale)
 
 @app.route('/capture_frame', methods=['POST'])
@@ -132,3 +133,33 @@ def capture_frame():
     orange_image = img_td
    
     return jsonify({'status': 'success'})
+
+@app.route('/product_list')
+def product_list():
+    """Product list page."""
+    products = [
+        {'id': 1, 'name': 'T-Shirt', 'price': 500, 'image': 'product_images/tshirt.jpg'},
+        {'id': 2, 'name': 'Jeans', 'price': 1000, 'image': 'product_images/jeans.jpg'},
+        {'id': 3, 'name': 'Shoes', 'price': 800, 'image': 'product_images/shoes.jpg'},
+        # ... add more products here
+    ]
+    return render_template('product_list.html', products=products)
+
+@app.route('/product/<int:product_id>')
+def product_details(product_id):
+    """Product details page."""
+    products = [
+        {'id': 1, 'name': 'T-Shirt', 'price': 500, 'image': 'product_images/tshirt.jpeg', 'description': 'A cool t-shirt'},
+        {'id': 2, 'name': 'Jeans', 'price': 1000, 'image': 'product_images/jeans.jpg', 'description': 'Comfortable jeans'},
+        {'id': 3, 'name': 'Shoes', 'price': 800, 'image': 'product_images/shoes.jpg', 'description': 'Stylish shoes'},
+        # ... add more products here
+    ]
+    product = next((item for item in products if item["id"] == product_id), None)
+    if product:
+        return render_template('product_details.html', product=product)
+    else:
+        return "Product not found", 404
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

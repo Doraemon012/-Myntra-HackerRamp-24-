@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#">Men</a>
+            <a href="#">Women</a>
+            <a href="#">Kids</a>
+            <a href="#">Home & Living</a>
+            <a href="#">Beauty</a>
+            <a href="#">Studio</a>
+        </nav>
+    </header>
+    <div class="breadcrumb">
+        <a href="#">Home</a> / <a href="#">Clothing</a> / <a href="#">Women Clothing</a> 
+        </div>
+    <div class="container">
+        <aside class="filters">
+            <h2>Filters</h2>
+            <div>
+                <h3>Categories</h3>
+                <ul>
+                    <li><input type="checkbox" id="sarees"> <label for="sarees">Sarees</label></li>
+                    <li><input type="checkbox" id="kurta-sets"> <label for="kurta-sets">Kurta Sets</label></li>
+                    <!-- Add more filters  -->
+                </ul>
+            </div>
+            <div>
+                <h3>Brand</h3>
+                <ul>
+                    <li><input type="checkbox" id="kalini"> <label for="kalini">Kalini</label></li>
+                    <li><input type="checkbox" id="mitera"> <label for="mitera">Mitera</label></li>
+                    <!-- Add more brands -->
+                </ul>
+            </div>
+            <div>
+                <h3>Price</h3>
+                <input type="range" min="29" max="14647" value="500">
+            </div>
+        </aside>
+        <main class="product-list">
+            <h1>Product List</h1>
+            <ul>
+                {% for product in products %}
+                <li class="product-item">
+                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+                    <h2><a href="{{ url_for('product_details', product_id=product.id) }}">{{ product.name }}</a></h2>
+                    <p>Price: {{ product.price }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </main>
+    </div>
+</body>
+</html>
