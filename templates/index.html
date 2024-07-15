@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pose Estimation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.129.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.129.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+
+  <body>
+    <br />
+    <div class="mx-auto" id="vid" style="width: 700px; display: none">
+      <img id="image_inp" src="{{ url_for('video_feed') }}" />
+    </div>
+    <video id="video" width="640" height="480" autoplay style="display: none;"></video>
+
+   
+    
+    {% block content %}
+    <div id="scene-box"></div>
+    {% endblock %}
+
+    <button id="toggleBBx">Done</button>
+
+    
+    <script type="module">
+      import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+      import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
+      import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js";
+
+
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      // Step 2: Request webcam access
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+          // Step 3: Display the video stream
+          const video = document.querySelector('video'); // Assuming there's a <video> element in your HTML
+          video.srcObject = stream;
+          video.play();
+        })
+        .catch(function (error) {
+          console.error("Error accessing the webcam", error);
+        });
+    } else {
+      console.error("Your browser does not support user media or it is not enabled.");
+    }
+    
+async function captureFrame() {
+    const video = document.querySelector('video');
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    const image = canvas.toDataURL('image/jpeg');
+
+    // Send the image to the Flask server
+    await fetch('/capture_frame', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: image }),
+    });
+}
+
+// Example: Capture and send a frame every second
+setInterval(captureFrame, 100);
+
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      camera.position.z = 8;
+
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      camera.aspect= window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const img = document.getElementById("image_inp");
+      const texture = new THREE.Texture(img);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+
+      const geometry = new THREE.PlaneGeometry(1 * 10, 0.75 * 10);
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+      });
+      const plane = new THREE.Mesh(geometry, material);
+      plane.position.set(.5 * geometry.parameters.width, -.5 * geometry.parameters.height, 0);
+    // camera.position.set(5, -2, 8);
+    camera.rotation.set(0, 0, 0);
+    camera.position.set(.5 * geometry.parameters.width, -.5 * geometry.parameters.height, 5);
+
+      scene.add(plane);
+
+      // const sphereGeometry = new THREE.SphereGeometry(0.2, 32, 32);
+      // const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xfa8072 });
+      // const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      // scene.add(sphereMesh);
+
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+      // const controls = new OrbitControls(camera, renderer.domElement);
+
+      let hlight = new THREE.AmbientLight(0x404040, 100);
+      scene.add(hlight);
+
+      let directionalLight = new THREE.DirectionalLight(0x0000ff, 100);
+      directionalLight.position.set(0, 1, 0);
+      directionalLight.castShadow = true;
+      scene.add(directionalLight);
+
+      const light = new THREE.PointLight(0xff0000, 1, 100);
+      light.position.set(50, 50, 50);
+      scene.add(light);
+
+      const loader = new GLTFLoader();
+      let uTmodel;
+
+      // Step 1: Load the PNG texture
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load(
+        "{{ url_for('static', filename='tex.png') }}",
+        function (texture) {
+          // Texture loaded
+
+          // Step 2: Load the GLTF model
+          loader.load(
+            "{{ url_for('static', filename='dress0001.glb') }}",
+            function (gltf) {
+              uTmodel = gltf.scene;
+              uTmodel.scale.set(0.2, 0.2, 0.2);
+              uTmodel.position.set(0, 0, 1);
+              scene.add(uTmodel);
+
+              // Step 3: Identify the target object and apply the new material
+              uTmodel.traverse(function (object) {
+                if (object.isMesh && object.name === "YourTargetObjectName") {
+                  // Replace 'YourTargetObjectName' with the actual name
+                  // Step 4: Create a new material with the loaded texture and apply it
+                  uTmodel.material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                  });
+                }
+              });
+
+              animate();
+            },
+            undefined,
+            function (error) {
+              console.error("An error happened", error);
+            }
+          );
+        },
+        undefined,
+        function (error) {
+          console.error("An error occurred while loading the texture:", error);
+        }
+      );
+
+      const initialRotation = {
+        x: 0, // Initial x-axis rotation in radians
+        y: 0, // Initial y-axis rotation in radians
+        z: 0, // Initial z-axis rotation in radians
+      };
+
+      // Function to check if the model is significantly rotated
+      // function isModelRotated(model, initialRotation, threshold = 0.01) {
+      //   return Math.abs(model.rotation.x - initialRotation.x) > threshold ||
+      //     Math.abs(model.rotation.y - initialRotation.y) > threshold ||
+      //     Math.abs(model.rotation.z - initialRotation.z) > threshold;
+      // }
+
+      // Function to conditionally scale the model
+      // function conditionalScale(model, scaleX, scaleY, scaleZ, initialRotation) {
+      //   if (!isModelRotated(model, initialRotation)) {
+      //     // Model is not significantly rotated, apply scaling
+      //     model.scale.set(scaleX, scaleY, scaleZ);
+      //     console.log("Model scaled to:", scaleX, scaleY, scaleZ);
+      //   } else {
+      //     // Model is rotated, skipping scaling
+      //     console.log("Model is rotated. Skipping scaling.");
+      //   }
+      // }
+
+      function updateModelPositionAndScale(landmarks, uTmodel) {
+        if (uTmodel && landmarks) {
+          const leftShoulder = landmarks[11]; // Adjust index as per your data
+          const rightShoulder = landmarks[12]; // Adjust index as per your data
+
+          // const shoulderWidth = Math.abs(leftShoulder.x - rightShoulder.x);
+          // const shoulderWidth = (leftShoulder.x - rightShoulder.x);
+          // const scaleFactor = shoulderWidth; // Adjust scale factor based on your model and landmarks
+
+          const midpointX = (leftShoulder.x + rightShoulder.x) / 2;
+          const midpointY = (leftShoulder.y + rightShoulder.y) / 2;
+          const midpointZ = (leftShoulder.z + rightShoulder.z) / 2;
+
+          console.log("shoulder width:", leftShoulder.x - rightShoulder.x);
+
+
+          function fetchScaleAndApply(uTmodel) {
+  fetch('{{ url_for("get_Scale") }}') // Fetch the scale value from the server
+    .then((response) => response.json()) // Parse the JSON response
+    .then((data) => {
+      const scale = Number(data.scale); // Assuming the scale is under the 'scale' key and converting it to a number
+      console.log(scale, "scale fetched from server");
+
+      if (!isNaN(scale) && scale > 0) { // Validate that scale is a number and greater than 0
+        uTmodel.scale.set(scale, scale, scale);
+        console.log(uTmodel.scale, "uTmodel.scale updated");
+      } else {
+        console.error("Invalid scale value:", scale);
+      }
+    })
+    .catch((error) => console.error("Error fetching scale:", error));
+}
+
+          fetchScaleAndApply(uTmodel);
+
+          uTmodel.position.set(
+            midpointX * geometry.parameters.width,
+            -midpointY * geometry.parameters.height,
+            midpointZ * geometry.parameters.height * 0
+          );
+
+          updateModelRotation(leftShoulder, rightShoulder, uTmodel);
+        }
+      }
+
+      function updateModelRotation(leftShoulder, rightShoulder, uTmodel) {
+
+        const direction = new THREE.Vector3().subVectors(
+          leftShoulder,
+          rightShoulder
+        );
+
+        const angle = Math.atan2(direction.y, direction.x);
+
+        uTmodel.rotation.y = angle;
+      }
+
+      function fetchAndLogLandmarks() {
+        fetch("/get_landmarks")
+          .then((response) => response.json())
+          .then((data) => {
+            updateModelPositionAndScale(data, uTmodel);
+            console.log(uTmodel.position, "uTmodel.position updated");
+          })
+          .catch((error) => console.error("Error fetching landmarks:", error));
+      }
+
+      setInterval(fetchAndLogLandmarks, 100);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (img.complete) {
+          texture.needsUpdate = true; 
+        }
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      document.getElementById("toggleBBx").onclick = function () {
+        fetch("/update_variable", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/www-myrepltproject",
+          },
+        });
+      };
+
+    </script>
+  </body>
+</html>
