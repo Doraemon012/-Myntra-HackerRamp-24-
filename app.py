@@ -133,5 +133,3 @@ def capture_frame():
     orange_image = img_td
    
     return jsonify({'status': 'success'})
-if __name__ == "__main__":
-    app.run(debug=False)
