@@ -1,1 +1,21 @@
-opencv-python ﻿absl-py attrs click colorama cycler Flask itsdangerous Jinja2 kiwisolver MarkupSafe matplotlib mediapipe numpy opencv-contrib-python Pillow protobuf pyparsing python-dateutil six Werkzeug cvlearn
+opencv-python
+absl-py
+attrs
+click
+colorama
+cycler
+Flask
+itsdangerous
+Jinja2
+kiwisolver
+MarkupSafe
+matplotlib
+mediapipe
+numpy
+opencv-contrib-python
+Pillow
+protobuf
+pyparsing
+python-dateutil
+six
+Werkzeug
