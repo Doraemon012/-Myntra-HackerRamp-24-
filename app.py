@@ -1,10 +1,10 @@
 import time
-import cv2
 from flask import Flask, render_template, Response, jsonify, request
 import mediapipe as mp
 import math
 import numpy as np
 import base64
+import cv2
 
 app = Flask(__name__)
 landmarks_global = []
