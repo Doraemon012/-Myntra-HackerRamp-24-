@@ -1,10 +1,77 @@
 import time
+import cv2
 from flask import Flask, render_template, Response, jsonify, request
 import mediapipe as mp
 import math
 import numpy as np
 import base64
-import cv2
+
+products = [  {
+        "id": 1,
+        "name": "T-Shirt",
+        "price": 500,
+        "image": "product-images/tshirt.jpeg",
+        "description": "A cool t-shirt",
+        "model": "dress0001.glb"
+      },
+      {
+        "id": 2,
+        "name": "Dress",
+        "price": 1000,
+        "image": "product-images/jeans.jpeg",
+        "description": "Stylish Dress",
+        "model": "dress.glb",
+        "sizes": [26, 28, 30, 32, 34, 36]
+      },
+      {
+        "id": 3,
+        "name": "Pink T-Shirt",
+        "price": 500,
+        "image": "https://www.snitch.co.in/cdn/shop/products/Snitch_April22_0161-1.jpg?v=1651234220",
+        "description": "Casual Cotton T-Shirt",
+        "sizes": ["S", "M", "L", "XL", "XXL"]
+      },
+      {
+        "id": 4,
+        "name": "Sneakers",
+        "price": 2000,
+        "image": "https://rukminim2.flixcart.com/image/850/1000/xif0q/shoe/t/3/n/3-875-mlt-3-deals4you-multi-original-imagg27xn9hnxw6h.jpeg?q=90&crop=false",
+        "description": "Comfortable Running Sneakers",
+        "sizes": [7, 8, 9, 10, 11, 12]
+      },
+      {
+        "id": 5,
+        "name": "Jacket",
+        "price": 3000,
+        "image": "https://images.bestsellerclothing.in/data/only/4-nov-2023/295499301_g0.jpg?width=1080&height=1355&mode=fill&fill=blur&format=auto",
+        "description": "Warm Winter Jacket",
+        "sizes": ["S", "M", "L", "XL"]
+      },
+      {
+        "id": 6,
+        "name": "Skirt",
+        "price": 1200,
+        "image": "https://www.tjori.com/cdn/shop/products/278420-2019-07-09-13_03_02.665543-big-image.jpg?v=1663261677",
+        "description": "Elegant Midi Skirt",
+        "sizes": [26, 28, 30, 32]
+      },
+      {
+        "id": 7,
+        "name": "Blouse",
+        "price": 800,
+        "image": "https://5.imimg.com/data5/SELLER/Default/2023/5/307478130/BW/YM/UN/134292146/multicolor-kalamkari-print-blouse.jpg",
+        "description": "Chic Silk Blouse",
+        "sizes": ["S", "M", "L", "XL"]
+      },
+      {
+        "id": 10,
+        "name": "Sneakers",
+        "price": 2000,
+        "image": "https://rukminim2.flixcart.com/image/850/1000/xif0q/shoe/t/3/n/3-875-mlt-3-deals4you-multi-original-imagg27xn9hnxw6h.jpeg?q=90&crop=false",
+        "description": "Comfortable Running Sneakers",
+        "sizes": [7, 9, 11]
+        }]
+
 
 app = Flask(__name__)
 landmarks_global = []
@@ -106,7 +173,7 @@ def get_landmarks():
 @app.route('/get_Scale')
 def get_Scale():
     """Endpoint to get scale factor for the model."""
-    print(scale, "sca")
+    # print(scale, "sca")
     
     return jsonify(scale= scale)
 
@@ -137,29 +204,27 @@ def capture_frame():
 @app.route('/product_list')
 def product_list():
     """Product list page."""
-    products = [
-        {'id': 1, 'name': 'T-Shirt', 'price': 500, 'image': 'product_images/tshirt.jpg'},
-        {'id': 2, 'name': 'Jeans', 'price': 1000, 'image': 'product_images/jeans.jpg'},
-        {'id': 3, 'name': 'Shoes', 'price': 800, 'image': 'product_images/shoes.jpg'},
-        # ... add more products here
-    ]
+   
     return render_template('product_list.html', products=products)
 
 @app.route('/product/<int:product_id>')
 def product_details(product_id):
     """Product details page."""
-    products = [
-        {'id': 1, 'name': 'T-Shirt', 'price': 500, 'image': 'product_images/tshirt.jpeg', 'description': 'A cool t-shirt'},
-        {'id': 2, 'name': 'Jeans', 'price': 1000, 'image': 'product_images/jeans.jpg', 'description': 'Comfortable jeans'},
-        {'id': 3, 'name': 'Shoes', 'price': 800, 'image': 'product_images/shoes.jpg', 'description': 'Stylish shoes'},
-        # ... add more products here
-    ]
+    
     product = next((item for item in products if item["id"] == product_id), None)
     if product:
         return render_template('product_details.html', product=product)
     else:
         return "Product not found", 404
 
+@app.route('/product/try_on_ar<string:model_name>')
+def try_on_ar(model_name):
+    """Try-on AR page."""
+    return render_template('try_on_ar.html', model_name=model_name)
+
+@app.template_filter('enumerate')
+def enumerate_filter(s):
+    return enumerate(s)   
 
 if __name__ == '__main__':
     app.run(debug=True)

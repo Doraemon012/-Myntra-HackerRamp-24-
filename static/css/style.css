@@ -1,241 +1,56 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
 
-.container {
-    display: flex;
-    padding: 20px;
+.navbar {
+    margin-bottom: 0;
 }
 
-.filters {
-    width: 20%;
-    padding: 20px;
-    border-right: 1px solid #ccc;
+.jumbotron {
+    background-color: #f7f7f7;
+    color: #333;
+    padding: 100px 25px;
 }
 
-.filters h2 {
-    margin-top: 0;
+.jumbotron .btn-primary {
+    background-color: #ff3f6c;
+    border-color: #ff3f6c;
 }
 
-.filters h3 {
-    margin-bottom: 10px;
+.jumbotron .btn-primary:hover {
+    background-color: #e33b62;
+    border-color: #e33b62;
 }
 
-.filters ul {
-    list-style: none;
-    padding: 0;
+section h2 {
+    color: #333;
 }
 
-.filters li {
-    margin-bottom: 10px;
-}
-
-.product-list {
-    width: 80%;
-    padding: 20px;
-}
-
-.product-list h1 {
-    margin-top: 0;
-}
-
-.product-list ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    list-style: none;
-    padding: 0;
-}
-
-.product-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-    background-color: #fff;
-}
-
-.product-item img {
-    max-width: 100%;
-    height: auto;
-}
-
-.product-item h2 {
-    font-size: 1.2em;
-    margin: 10px 0;
-}
-
-.product-item p {
-    margin: 0;
+section p {
     color: #555;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #f8f8f8;
-}
-
-header {
-    background-color: #fff;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ccc;
-}
-
-nav {
-    display: flex;
-    gap: 15px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #333;
-}
-
-.breadcrumb {
-    margin: 20px;
-    font-size: 14px;
-}
-
-.breadcrumb a {
-    text-decoration: none;
-    color: #007bff;
-}
-
-.breadcrumb a:hover {
-    text-decoration: underline;
-}
-
-.product-details {
-    display: flex;
-    padding: 20px;
-    gap: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    margin: 20px;
-    border-radius: 5px;
-}
-
-.image-section img {
-    max-width: 100%;
-    border-radius: 5px;
-}
-
-.details-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.details-section h1 {
-    margin: 0;
-}
-
-.rating {
-    display: flex;
-    gap: 10px;
-    color: #777;
-}
-
-.price {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    color: #333;
-}
-
-.price .current-price {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.price .original-price {
-    text-decoration: line-through;
-    color: #777;
-}
-
-.price .discount {
-    color: #e74c3c;
-    font-weight: bold;
-}
-
-.size-select {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.size-select .sizes button {
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
-}
-
-.size-select .sizes button:hover {
-    background-color: #f0f0f0;
-}
-
-.actions {
-    display: flex;
-    gap: 10px;
-}
-
-.actions .add-to-bag {
-    padding: 15px 20px;
+.btn-primary {
     background-color: #ff3f6c;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    font-size: 16px;
+    border-color: #ff3f6c;
 }
 
-.actions .wishlist {
-    padding: 15px 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.delivery-options, .offers {
-    border-top: 1px solid #ccc;
-    padding-top: 15px;
-}
-
-.delivery-options h3, .offers h3 {
-    margin: 0 0 10px 0;
-}
-
-.delivery-options input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    width: calc(100% - 80px);
-}
-
-.delivery-options button {
-    padding: 10px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-    margin-left: 10px;
+.btn-primary:hover {
+    background-color: #e33b62;
+    border-color: #e33b62;
 }
 
 footer {
-    margin: 20px;
+    background-color: #f7f7f7;
+    color: #333;
 }
 
 footer a {
+    color: #ff3f6c;
     text-decoration: none;
-    color: #007bff;
 }
 
 footer a:hover {
-    text-decoration: underline;
+    color: #e33b62;
+    text-decoration: none;
 }

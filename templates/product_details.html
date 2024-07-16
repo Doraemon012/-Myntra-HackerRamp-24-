@@ -1,73 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Product Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <a href="#">Men</a>
-            <a href="#">Women</a>
-            <a href="#">Kids</a>
-            <a href="#">Home & Living</a>
-            <a href="#">Beauty</a>
-            <a href="#">Studio</a>
-        </nav>
-    </header>
-    <div class="breadcrumb">
-        <a href="#">Home</a> / <a href="#">Clothing</a> / <a href="#">Women Clothing</a> / <a href="#">Kurta Sets</a> / {{ product.name }}
-    </div>
-    <div class="product-details">
-        <div class="image-section">
-            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ product.name }}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .breadcrumb {
+        background-color: white;
+      }
+      .product-image {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+      .product-thumbnails img {
+        width: 60px;
+        height: 80px;
+        margin-right: 10px;
+        cursor: pointer;
+        object-fit: cover;
+        border: 1px solid #ddd;
+      }
+      .product-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .product-info span.text-muted {
+        font-size: 1.2rem;
+      }
+      .product-info span.text-danger {
+        font-size: 1.5rem;
+      }
+      .size-options {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .size-options h5 {
+        margin-right: 15px;
+        font-size: 1.2rem;
+      }
+      .size-options button {
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        padding: 5px 15px;
+        margin: 0 5px;
+        background-color: white;
+        cursor: pointer;
+      }
+      .delivery-options {
+        margin-top: 20px;
+      }
+      .delivery-options input {
+        margin-top: 10px;
+        width: 100%;
+      }
+      .best-offers {
+        background-color: #f5f5f5;
+        padding: 15px;
+        margin-top: 20px;
+      }
+      .best-offers p {
+        margin: 0;
+      }
+      .btn-primary {
+        background-color: #ff3f6c;
+        border: none;
+      }
+      .btn-outline-secondary {
+        border-color: #ff3f6c;
+        color: #ff3f6c;
+      }
+      .btn-outline-secondary:hover {
+        background-color: #ff3f6c;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <header>{% include 'nav.html' %}</header>
+    <div class="container mt-5">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item"><a href="/product_list">Products</a></li>
+          {% if product.name %}
+          <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+          {% endif %}
+        </ol>
+      </nav>
+      <div class="row">
+        <div class="col-md-6">
+          {% if product.model %}
+
+          <img
+            src="{{ url_for('static', filename=product.image) }}"
+            alt="{{ product.name }}"
+            class="img-fluid product-image"
+          />
+
+          {% else %}
+
+          <img
+            src="{{ product.image}}"
+            alt="{{ product.name }}"
+            class="img-fluid product-image"
+          />
+
+          {% endif %}
         </div>
-        <div class="details-section">
-            <h1>{{ product.name }}</h1>
-            <div class="rating">
-                <span>{{ product.rating }}</span> <span> | </span> <span>{{ product.reviews }} Ratings</span>
-            </div>
-            <div class="price">
-                <span class="current-price">₹{{ product.price }}</span>
-                <span class="original-price">₹{{ product.original_price }}</span>
-                <span class="discount">{{ product.discount }}% OFF</span>
-            </div>
-            <div class="size-select">
-                <span>Select Size:</span>
-                <div class="sizes">
-                    <button>S</button>
-                    <button>M</button>
-                    <button>L</button>
-                    <button>XL</button>
+        <div class="col-md-6">
+          <h2>{{ product.name }}</h2>
+          <p>{{ product.description }}</p>
+
+          <div class="product-info flex-column align-items-start my-4">
+            <span class="text-muted">4.3 <small>(303 Ratings)</small></span>
+            <span class="text-danger"
+              >₹{{ product.price }}
+              <small class="text-decoration-line-through"
+                >₹{{ product.mrp }}</small
+              >
+              <span class="text-success"
+                >({{ product.discount }}% OFF)</span
+              ></span
+            >
+          </div>
+          <div class="size-options mb-3">
+            <h5>Select Size</h5>
+            <button class="btn btn-outline-danger" type="button">26</button>
+            <button class="btn btn-outline-danger" type="button">28</button>
+            <button class="btn btn-outline-danger" type="button">30</button>
+            <button class="btn btn-outline-danger" type="button">32</button>
+          </div>
+          <div class="flex-column gap-4 mt-4">
+            <button class="btn btn-danger btn-lg mb-3">Add to Bag</button>
+            <button class="btn btn-outline-danger btn-lg mb-3">Wishlist</button>
+            
+
+            <!-- Button trigger modal -->
+            
+
+            <button
+              class="btn btn-success btn-lg mb-3 flex-column align-items-center"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="currentColor"
+                class="bi bi-camera-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                <path
+                  d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"
+                />
+              </svg>
+              Try On
+            </button>
+
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="exampleModal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                      How whould you like to try on?
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger"
+                      data-bs-dismiss="modal"
+                    >
+                      Try on with image
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                    onclick="navigateToTryOnLive('{{ product.slug }}')"
+                    >
+                      Try on live
+                    </button>
+                  </div>
                 </div>
+              </div>
             </div>
-            <div class="actions">
-                <button class="add-to-bag">ADD TO BAG</button>
-                <button class="wishlist">WISHLIST</button>
-                <!-- Try On Button -->
-                <button class="try-on">TRY ON</button>
-            </div>
-            <div class="delivery-options">
-                <h3>DELIVERY OPTIONS</h3>
-                <input type="text" placeholder="Enter pincode">
-                <button>Check</button>
-                <p>100% Original Products</p>
-                <p>Pay on delivery might be available</p>
-                <p>Easy 14 days returns and exchanges</p>
-            </div>
-            <div class="offers">
-                <h3>BEST OFFERS</h3>
-                <p><strong>Best Price: ₹{{ product.best_price }}</strong></p>
-                <p>Applicable on: Orders above ₹1499 (only on first purchase)</p>
-                <p>Coupon code: MYNTRA400</p>
-                <p>Coupon Discount: ₹{{ product.coupon_discount }} off (check cart for final savings)</p>
-                <p>10% Instant Discount on ICICI Credit & Debit Cards</p>
-            </div>
+          </div>
+
+          <div class="best-offers mt-3">
+            <h5>Best Offers</h5>
+            <p>Price: ₹1051</p>
+          </div>
         </div>
+      </div>
     </div>
-    <footer>
-        <a href="{{ url_for('product_list') }}">Back to Product List</a>
-    </footer>
-</body>
+    <script>
+        function navigateToTryOnLive(product) {
+          // Assuming the route for live try-on is '/try-on/live/<productSlug>'
+          window.location.href = `/product/try_on_ar{{product.model}}`;
+        }
+      </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
