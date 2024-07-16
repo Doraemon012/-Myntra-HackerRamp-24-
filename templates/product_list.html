@@ -87,25 +87,25 @@
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                   <label class="form-check-label" for="categoryCheck1">
-                    Men 1
+                    Men
                   </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                     <label class="form-check-label" for="categoryCheck1">
-                      Category 1
+                      Women
                     </label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                     <label class="form-check-label" for="categoryCheck1">
-                      Category 1
+                      Kids
                     </label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                     <label class="form-check-label" for="categoryCheck1">
-                      Category 1
+                      Teens
                     </label>
                   </div>
                 <!-- Add more checkboxes as needed -->
@@ -115,79 +115,59 @@
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  Adidas
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  Puma
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  Peter England
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  Nike
                 </label>
               </div>
             </div>
             <div class="border-bottom p-4">
               <p class="h5">PRICE</p>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
-                <label class="form-check-label" for="categoryCheck1">
-                  Category 1
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
-                <label class="form-check-label" for="categoryCheck1">
-                  Category 1
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
-                <label class="form-check-label" for="categoryCheck1">
-                  Category 1
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
-                <label class="form-check-label" for="categoryCheck1">
-                  Category 1
-                </label>
-              </div>
+              
+           
+                <input type="range" id="price" name="price" min="0" max="1000">
+
             </div>
             <div class="border-bottom p-4">
               <p class="h5">COLOR</p>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  Pink
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  Blue
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  Black
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  White
                 </label>
               </div>
               
@@ -197,13 +177,13 @@
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  0-10%
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="categoryCheck1">
                 <label class="form-check-label" for="categoryCheck1">
-                  Category 1
+                  10-20%
                 </label>
               </div>
             </div>
@@ -221,9 +201,9 @@
                     <a href="{{ url_for('product_details', product_id=product.id) }}" class="text-decoration-none text-dark">
                       <div class="card h-100">
                         {% if product.model %}
-                        <img src="{{ url_for('static', filename=product.image) }}" class="card-img-top" alt="{{ product.name }}">
+                        <img src="{{ url_for('static', filename=product.image) }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px;">
                         {% else %}
-                        <img src="{{product.image }}" class="card-img-top" alt="{{ product.name }}">
+                        <img src="{{product.image }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px;">
                         {% endif %}
 
                         <div class="card-body">
@@ -236,6 +216,10 @@
                             <span class="badge bg-danger">{{ product.offer }}</span>
                             {% endif %}
                           </div>
+
+                          {% if product.model %}
+                       <span class="text px-2 mb-0 mt-4" style="  background-color: #fcd1d0; border-radius: 8px;"> AR Try On available</span>
+                        {% endif %}
                         </div>
                       </div>
                     </a>
