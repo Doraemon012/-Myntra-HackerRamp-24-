@@ -76,10 +76,7 @@ products = [  {
 
 
 app = Flask(__name__)
-app.secret_key = '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'
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 landmarks_global = []
 isBbx = True
