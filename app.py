@@ -1,6 +1,7 @@
 import time
 import os
 import cv2
+import mediapipe as mp
 from flask import Flask, render_template, Response, jsonify, request, redirect,url_for
 import math
 import numpy as np
