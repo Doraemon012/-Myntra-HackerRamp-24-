@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Try-On</title>
+</head>
+<body>
+    <header>{% include 'nav.html' %}</header>
+    <h1>TryOnWithImage</h1>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+    
+    <iframe src="https://nymbo-virtual-try-on.hf.space?model={{ model_name }}"></iframe>
+       
+   
+</body>
+</html>

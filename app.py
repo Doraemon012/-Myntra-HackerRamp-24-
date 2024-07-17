@@ -1,10 +1,11 @@
 import time
+import os
 import cv2
-from flask import Flask, render_template, Response, jsonify, request
-import mediapipe as mp
+from flask import Flask, render_template, Response, jsonify, request, redirect,url_for
 import math
 import numpy as np
 import base64
+
 
 products = [  {
         "id": 1,
@@ -74,6 +75,11 @@ products = [  {
 
 
 app = Flask(__name__)
+app.secret_key = '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'
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+SCOPES = ['https://www.googleapis.com/auth/calendar']
+
 landmarks_global = []
 isBbx = True
 scale = 0
@@ -216,11 +222,20 @@ def product_details(product_id):
         return render_template('product_details.html', product=product)
     else:
         return "Product not found", 404
-
+# ar try on
 @app.route('/product/try_on_ar<string:model_name>')
 def try_on_ar(model_name):
     """Try-on AR page."""
     return render_template('try_on_ar.html', model_name=model_name)
+#2d try on 
+@app.route('/tryon')
+def try_on():
+    return redirect(url_for('twod_tryon'))
+
+@app.route('/twodtryon')
+def twod_tryon():
+    return render_template('twodtryon.html')
+
 
 @app.template_filter('enumerate')
 def enumerate_filter(s):
